@@ -6,4 +6,4 @@ export const emails = [
   "leonelmessi@gmail.com",
 ];
 
-export const emailErrorMsg = "This email is not register!"
+export const emailErrorMsg = "This email is not registered!"

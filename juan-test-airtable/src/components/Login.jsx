@@ -5,8 +5,6 @@ import Container from "@mui/material/Container";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
-import Toolbar from "@mui/material/Toolbar";
-import CardHeader from "@mui/material/CardHeader";
 import { emailErrorMsg } from "../helpers/emails";
 import Dashboard from "./Dashboard";
 
@@ -14,19 +12,21 @@ function Login() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [allData, setAllData] = useState([]);
-  const [dataPerEmail, setDataPerEmail] = useState()
+  const [dataPerEmail, setDataPerEmail] = useState();
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    fetch("https://api.airtable.com/v0/appPEaWJdX2OxF89e/Imported table", {
-      headers: new Headers({
-        Authorization:
-          "Bearer pat5ktt9SGs2y9a2k.b64604b7cb569bb0bdf604cc0eec44540619e8433d80f48180954d7d6b2d4628",
-      }),
-    })
+    fetch(
+      `${process.env.REACT_APP_URL}/${process.env.REACT_APP_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`,
+      {
+        headers: new Headers({
+          Authorization: `Bearer ${process.env.REACT_APP_URL_TOKEN}`,
+        }),
+      }
+    )
       .then(async (resp) => {
         let records = await resp.json();
         setAllData(records.records);
@@ -35,13 +35,13 @@ function Login() {
   };
 
   const handleEmailInfo = () => {
-    const itemFound = allData.find(
-      (item) => item.fields.RepEmail === email
-    );
+    const itemFound = allData.find((item) => item.fields.RepEmail === email);
     if (itemFound) {
-      let filteredData = allData.filter(item => item.fields.RepEmail === email)
+      let filteredData = allData.filter(
+        (item) => item.fields.RepEmail === email
+      );
       setDataPerEmail(filteredData);
-      setEmailError('');
+      setEmailError("");
     } else {
       setEmailError(emailErrorMsg);
     }
@@ -80,7 +80,7 @@ function Login() {
           width="100%"
         >
           <Box width={dataPerEmail ? "40%" : "100%"} marginTop={2}>
-            <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
+            <InputLabel htmlFor="basic-TextField-email">Email</InputLabel>
             <OutlinedInput
               id="basic-TextField-email"
               type="email"
@@ -92,7 +92,7 @@ function Login() {
                   outline: "none",
                 },
               }}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Typography
               sx={{ padding: "10px", color: "red", fontSize: "10px" }}
@@ -106,10 +106,12 @@ function Login() {
             width={dataPerEmail ? "40%" : "100%"}
             marginTop={0}
           >
-            <Button onClick={handleEmailInfo}>Continue</Button>
+            <Button onClick={handleEmailInfo}>Search</Button>
           </Box>
         </Box>
-        {dataPerEmail && <Dashboard companies={dataPerEmail}/>}
+        {dataPerEmail && emailError === "" && (
+          <Dashboard companies={dataPerEmail} />
+        )}
       </Box>
     </Container>
   );

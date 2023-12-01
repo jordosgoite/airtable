@@ -15,11 +15,11 @@ const Dashboard = ({companies}) => {
   return (
     <Box sx={{ width: '100%', marginTop:"50px" }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Asigned Companies</InputLabel>
+        <InputLabel id="demo-simple-select-label">Assigned Companies</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          label="Asigned Companies"
+          label="Assigned Companies"
           onChange={(e)=> handleSelectChange(e.target.value)}
           sx={{width:"40%"}}
         >
